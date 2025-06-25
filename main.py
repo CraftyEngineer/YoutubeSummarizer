@@ -7,9 +7,7 @@ from groq import Groq
 import os
 import re
 import base64
-from rpunct import RestorePuncts
 from googletrans import Translator
-import speech_recognition as sr
 from io import StringIO
 
 # ---------------- CONFIG ----------------
