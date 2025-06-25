@@ -1,6 +1,6 @@
 # 🎬 YouTube Video Summarizer + Chatbot (CraftyEngineer)
 
-An AI-powered Streamlit app that summarizes YouTube videos — even long ones — and allows you to **chat** with the summary!  
+An AI-powered Streamlit app that summarizes YouTube videos — and allows you to **chat** with the summary!  
 Built with ❤️ by [CraftyEngineer](https://github.com/CraftyEngineer)
 
 ![Banner](https://github.com/CraftyEngineer/youtubesummarizer/blob/main/ui_ss.png?raw=true)
