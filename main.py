@@ -150,5 +150,13 @@ if st.button("🗑️ Clear All", type="primary"):
         del st.session_state[key]
     st.rerun()
     st.session_state.clear()
+# Footer
+st.markdown("---")
+
+st.markdown(
+    "<div style='text-align: left; color: gray;'>Made with ❤️ by <a href='https://github.com/CraftyEngineer' target='_blank'><b>CraftyEngineer</b></a></div>",
+    unsafe_allow_html=True
+)
+
 
 print(f"✅ App loaded in {round(time.time() - start, 2)} sec")
