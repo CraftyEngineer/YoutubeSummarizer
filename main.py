@@ -9,6 +9,7 @@ import re
 import base64
 from deep_translator import GoogleTranslator
 from io import StringIO
+from urllib.parse import urlparse, parse_qs
 
 # ---------------- CONFIG ----------------
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -20,19 +21,23 @@ client = Groq(api_key=GROQ_API_KEY)
 # ---------------- HELPERS ----------------
 # print("Groq version:", groq.__version__)
 def get_video_id(url):
-    # Match patterns in different URL types
-    patterns = [
-        r"(?:v=|\/)([0-9A-Za-z_-]{11}).*?",  # Generic match for v= or /xyz
-        r"youtu\.be\/([0-9A-Za-z_-]{11})",
-        r"youtube\.com\/shorts\/([0-9A-Za-z_-]{11})",
-        r"youtube\.com\/embed\/([0-9A-Za-z_-]{11})"
-    ]
+    # Handle short links and query strings
+    parsed_url = urlparse(url)
+    query_params = parse_qs(parsed_url.query)
 
-    for pattern in patterns:
-        match = re.search(pattern, url)
-        if match:
-            return match.group(1)
-    
+    # Case: https://www.youtube.com/watch?v=VIDEO_ID
+    if "youtube.com" in parsed_url.netloc and "v" in query_params:
+        return query_params["v"][0]
+
+    # Case: https://youtu.be/VIDEO_ID
+    if "youtu.be" in parsed_url.netloc:
+        return parsed_url.path.strip("/")
+
+    # Case: https://www.youtube.com/shorts/VIDEO_ID or /embed/VIDEO_ID
+    match = re.search(r"(shorts|embed)/([0-9A-Za-z_-]{11})", parsed_url.path)
+    if match:
+        return match.group(2)
+
     return None
 @st.cache_data(show_spinner=False)
 def fetch_transcript(video_id):
