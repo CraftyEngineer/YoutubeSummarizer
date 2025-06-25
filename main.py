@@ -9,6 +9,7 @@ import re
 import base64
 from deep_translator import GoogleTranslator
 from io import StringIO
+import random
 
 # ---------------- CONFIG ----------------
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -18,7 +19,16 @@ client = Groq(api_key=GROQ_API_KEY)
 
 
 # ---------------- HELPERS ----------------
-# print("Groq version:", groq.__version__)
+proxies_list = [
+    "http://72.10.160.93:21875",   # Canada
+    "http://51.81.245.3:17981",    # US
+    "http://67.43.236.21:31517",   # Canada
+    "http://13.126.217.46:3128",   # India
+    "http://161.35.98.111:8080",   # US
+    "http://123.140.160.69:5031",  # South Korea
+    "http://78.47.127.91:80",      # Germany
+    # Add more if needed
+]
 def get_video_id(url):
     # Match patterns in different URL types
     patterns = [
@@ -36,8 +46,18 @@ def get_video_id(url):
     return None
 @st.cache_data(show_spinner=False)
 def fetch_transcript(video_id):
-    transcript = YouTubeTranscriptApi.get_transcript(video_id)
-    return " ".join([entry['text'] for entry in transcript])
+    for _ in range(len(proxies_list)):
+        proxy = random.choice(proxies_list)
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(video_id, proxies={
+                'http': proxy,
+                'https': proxy,
+            })
+            return " ".join([entry['text'] for entry in transcript])
+        except Exception as e:
+            print(f"[Proxy Fail] {proxy} ❌: {e}")
+            continue
+    raise Exception("❌ All proxies failed. Try again later or use a VPN.")
 
 def clean_response(text):
     return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL).strip()
