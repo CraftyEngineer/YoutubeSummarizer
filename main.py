@@ -3,7 +3,7 @@ start = time.time()
 
 import streamlit as st
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound
-from groq import Groq
+from groq import GroqClient as Groq
 import os
 import re
 import base64
