@@ -7,7 +7,7 @@ from groq import Groq
 import os
 import re
 import base64
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 from io import StringIO
 
 # ---------------- CONFIG ----------------
@@ -65,11 +65,7 @@ def query_llm(summary, user_input):
     return clean_response(response.choices[0].message.content)
 
 def translate_text(text, lang_code):
-    result = translator.translate(text, dest=lang_code)
-    if hasattr(result, '__await__'):  # if it's a coroutine
-        import asyncio
-        result = asyncio.run(result)
-    return result.text
+    return GoogleTranslator(source='auto', target=lang_code).translate(text)
 
 
 # ---------------- STREAMLIT UI ----------------
