@@ -20,13 +20,20 @@ client = Groq(api_key=GROQ_API_KEY)
 # ---------------- HELPERS ----------------
 # print("Groq version:", groq.__version__)
 def get_video_id(url):
-    if "shorts/" in url:
-        return url.split("shorts/")[-1].split("?")[0]
-    elif "watch?v=" in url:
-        return url.split("watch?v=")[-1].split("&")[0]
-    else:
-        return None
+    # Match patterns in different URL types
+    patterns = [
+        r"(?:v=|\/)([0-9A-Za-z_-]{11}).*?",  # Generic match for v= or /xyz
+        r"youtu\.be\/([0-9A-Za-z_-]{11})",
+        r"youtube\.com\/shorts\/([0-9A-Za-z_-]{11})",
+        r"youtube\.com\/embed\/([0-9A-Za-z_-]{11})"
+    ]
 
+    for pattern in patterns:
+        match = re.search(pattern, url)
+        if match:
+            return match.group(1)
+    
+    return None
 @st.cache_data(show_spinner=False)
 def fetch_transcript(video_id):
     transcript = YouTubeTranscriptApi.get_transcript(video_id)
