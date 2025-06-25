@@ -1,5 +1,5 @@
 streamlit
-groq
+groq>=0.2.2
 youtube-transcript-api
 googletrans==4.0.0-rc1
 
