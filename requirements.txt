@@ -1,6 +1,6 @@
 streamlit
 groq
-youtube_transcript_api
+youtube-transcript-api
 googletrans==4.0.0-rc1
 
 
