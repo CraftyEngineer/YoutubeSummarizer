@@ -18,6 +18,7 @@ client = Groq(api_key=GROQ_API_KEY)
 translator = Translator()
 
 # ---------------- HELPERS ----------------
+print("Groq version:", groq.__version__)
 def get_video_id(url):
     if "shorts/" in url:
         return url.split("shorts/")[-1].split("?")[0]
