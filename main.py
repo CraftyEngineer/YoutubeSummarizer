@@ -15,10 +15,10 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 # MODEL = "deepseek-r1-distill-llama-70b"
 MODEL = "llama3-8b-8192"
 client = Groq(api_key=GROQ_API_KEY)
-translator = Translator()
+
 
 # ---------------- HELPERS ----------------
-print("Groq version:", groq.__version__)
+# print("Groq version:", groq.__version__)
 def get_video_id(url):
     if "shorts/" in url:
         return url.split("shorts/")[-1].split("?")[0]
